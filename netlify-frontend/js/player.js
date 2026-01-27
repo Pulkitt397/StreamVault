@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 activeBackend = CONFIG.PRIMARY_BACKEND;
                 statusDot.style.background = '#22c55e'; // Green
-                statusText.textContent = '📱 Connected to Phone Backend';
+                statusText.textContent = 'Live';
                 statusBar.style.background = 'rgba(34, 197, 94, 0.1)';
                 statusBar.style.border = '1px solid rgba(34, 197, 94, 0.3)';
                 return;
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 activeBackend = CONFIG.FALLBACK_BACKEND;
                 statusDot.style.background = '#3b82f6'; // Blue
-                statusText.textContent = '☁️ Connected to Cloud Backend';
+                statusText.textContent = 'Live (Cloud)';
                 statusBar.style.background = 'rgba(59, 130, 246, 0.1)';
                 statusBar.style.border = '1px solid rgba(59, 130, 246, 0.3)';
                 return;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Both backends down
         statusDot.style.background = '#ef4444'; // Red
-        statusText.textContent = '❌ No backend available - Direct play only';
+        statusText.textContent = 'Offline';
         statusBar.style.background = 'rgba(239, 68, 68, 0.1)';
         statusBar.style.border = '1px solid rgba(239, 68, 68, 0.3)';
         activeBackend = null;
