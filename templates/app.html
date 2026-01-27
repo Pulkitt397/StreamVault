@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamVault | App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
+            <div class="nav-links">
+                <a href="/" style="font-size: 0.9rem;">&larr; Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container app-layout">
+        <div class="url-bar">
+            <input type="text" id="urlInput" placeholder="Paste video link (mp4, mkv, mov)...">
+            <button class="btn btn-primary" id="loadBtn">Go</button>
+        </div>
+
+        <!-- Action Choice Modal (Initially Hidden) -->
+        <div id="actionModal" style="display: none; text-align: center; margin-bottom: 40px;">
+            <h3 style="margin-bottom: 24px;">Choose an action:</h3>
+            <div style="display: flex; justify-content: center; gap: 24px;">
+                <button id="downloadActionBtn" class="btn btn-outline"
+                    style="min-width: 160px; justify-content: center;">
+                    <i class="fas fa-download"></i> Download
+                </button>
+                <button id="streamActionBtn" class="btn btn-primary" style="min-width: 160px; justify-content: center;">
+                    <i class="fas fa-play"></i> Watch Online
+                </button>
+            </div>
+        </div>
+
+        <div class="streamvault-player" id="playerContainer">
+            <video id="videoEl" playsinline></video>
+
+            <div class="loading-state" id="spinner">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- Custom Controls Overlay -->
+            <div class="player-overlay" id="controlsOverlay">
+                <!-- Progress -->
+                <div class="progress-container">
+                    <input type="range" id="seekSlider" class="seek-slider" min="0" max="100" value="0" step="0.1">
+                </div>
+
+                <div class="controls-row">
+                    <div class="left-controls">
+                        <button class="control-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
+                        <div style="font-size: 0.9rem; color: #ccc;">
+                            <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="right-controls">
+                        <i class="fas fa-volume-up control-btn" style="cursor: default;"></i>
+                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="1"
+                            id="volumeSlider">
+                        <button class="control-btn" id="fsBtn"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Player Logic -->
+    <script src="/static/js/player.js"></script>
+</body>
+
+</html>
