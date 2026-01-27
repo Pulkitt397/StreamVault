@@ -4,12 +4,12 @@
 const CONFIG = {
     // Primary backend (your phone via Cloudflare tunnel)
     // UPDATE THIS with your current cloudflared URL
-    PRIMARY_BACKEND: 'https://transcription-our-cleaning-colon.trycloudflare.com',
-    
+    PRIMARY_BACKEND: 'https://uri-stored-expand-revolutionary.trycloudflare.com',
+
     // Fallback backend (Render - always available)
     // UPDATE THIS with your Render URL
     FALLBACK_BACKEND: 'https://streamvault.onrender.com',
-    
+
     // Set to true to always use fallback
     USE_FALLBACK_ONLY: false
 };
@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Try primary backend first
         try {
-            const response = await fetch(CONFIG.PRIMARY_BACKEND + '/', { 
-                method: 'HEAD',
+            const response = await fetch(CONFIG.PRIMARY_BACKEND + '/', {
+                method: 'GET',
                 mode: 'cors',
                 signal: AbortSignal.timeout(5000)
             });
@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Try fallback backend
         try {
-            const response = await fetch(CONFIG.FALLBACK_BACKEND + '/', { 
-                method: 'HEAD',
+            const response = await fetch(CONFIG.FALLBACK_BACKEND + '/', {
+                method: 'GET',
                 mode: 'cors',
                 signal: AbortSignal.timeout(5000)
             });
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeBackend) {
             // Use proxy backend
             video.src = `${activeBackend}/stream?url=${encodeURIComponent(url)}`;
-            
+
             video.onerror = () => {
                 console.log("Proxy failed, trying direct...");
                 video.src = url;

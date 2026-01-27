@@ -6,6 +6,7 @@ from fastapi.responses import StreamingResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+import yt_dlp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,10 +27,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# Add CORS middleware to allow requests from Netlify frontend
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (or specify ["https://streamsvault.netlify.app"])
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -49,16 +50,40 @@ async def landing_page(request: Request):
 async def app_page(request: Request):
     return templates.TemplateResponse("app.html", {"request": request})
 
-
+def resolve_stream_url(url: str):
+    """
+    Uses yt-dlp to extract the direct video URL and title.
+    Returns (direct_url, filename).
+    """
+    ydl_opts = {
+        'format': 'best',
+        'quiet': True,
+        'noplaylist': True,
+    }
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            direct_url = info.get('url')
+            title = info.get('title', 'video')
+            ext = info.get('ext', 'mp4')
+            filename = f"{title}.{ext}"
+            return direct_url, filename
+    except Exception as e:
+        logger.warning(f"yt-dlp failed for {url}: {e}")
+        # Fallback: assume it's already a direct link
+        return url, "video.mp4"
 
 @app.get("/stream")
 async def proxy_stream(url: str, request: Request, download: bool = False):
     """
-    Proxies the video stream via a shared client pool for better performance.
+    Proxies the video stream. Supports YouTube, Reddit, etc. via yt-dlp.
     """
     if not url:
         raise HTTPException(status_code=400, detail="Missing URL parameter")
 
+    # Resolve URL (handle YouTube/Reddit etc.)
+    target_url, filename = resolve_stream_url(url)
+    
     headers = {}
     range_header = request.headers.get("range")
     if range_header:
@@ -67,13 +92,12 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
     headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 
     # Use the global client
-    req = http_client.build_request("GET", url, headers=headers)
+    req = http_client.build_request("GET", target_url, headers=headers)
     
     try:
         r = await http_client.send(req, stream=True)
     except Exception as e:
         logger.error(f"Failed to connect to upstream: {e}")
-        # If the global client fails completely, we might try to recover or just error
         raise HTTPException(status_code=502, detail="Error connecting to video source")
 
     # Headers to forward
@@ -83,25 +107,20 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
             response_headers[key] = r.headers[key]
     
     if download:
-        # Try to guess filename from URL or default to video.mp4
-        import os
-        from urllib.parse import urlparse
-        path = urlparse(url).path
-        filename = os.path.basename(path)
-        if not filename:
-            filename = "video.mp4"
-        response_headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+        # Sanitation for filename
+        import re
+        safe_filename = re.sub(r'[^\w\-_\. ]', '', filename)
+        response_headers["Content-Disposition"] = f'attachment; filename="{safe_filename}"'
 
     async def content_generator():
         try:
-            # 256KB chunks to reduce overhead and improve buffering
+            # 256KB chunks
             async for chunk in r.aiter_bytes(chunk_size=262144):
                 yield chunk
         except Exception as e:
             logger.error(f"Connection error during stream: {e}")
         finally:
             await r.aclose()
-            # Do NOT close the global client here!
 
     return StreamingResponse(
         content_generator(),
@@ -110,6 +129,3 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
         media_type=r.headers.get("content-type", "video/mp4")
     )
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

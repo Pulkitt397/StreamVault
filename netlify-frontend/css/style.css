@@ -369,6 +369,11 @@ body {
         padding: 0 16px;
     }
 
+    .app-layout {
+        padding-top: 140px;
+        /* Increased from default to prevent overlap */
+    }
+
     .hero {
         padding-top: 120px;
     }
