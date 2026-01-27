@@ -11,43 +11,44 @@
 
 <body>
 
+    <!-- Background Glow -->
+    <div class="glow-bg"></div>
+
     <nav class="navbar">
         <div class="container nav-content">
             <a href="/" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
             <div class="nav-links">
-                <a href="/" style="font-size: 0.9rem;">&larr; Back to Home</a>
+                <a href="/" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back to Home</a>
             </div>
         </div>
     </nav>
 
     <div class="container app-layout">
         <!-- Backend Status Indicator -->
-        <div id="statusBar"
-            style="margin-bottom: 16px; padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;">
-            <span id="statusDot" style="width: 10px; height: 10px; border-radius: 50%; background: #fbbf24;"></span>
+        <div id="statusBar" class="status-card animate-up delay-1">
+            <div id="statusDot" class="status-dot"></div>
             <span id="statusText">Checking backend...</span>
         </div>
 
-        <div class="url-bar">
-            <input type="text" id="urlInput" placeholder="Paste video link (mp4, mkv, mov)...">
-            <button class="btn btn-primary" id="loadBtn">Go</button>
+        <div class="url-bar animate-up delay-2">
+            <input type="text" id="urlInput" placeholder="Paste video link (YouTube, Reddit, etc)...">
+            <button class="btn btn-primary" id="loadBtn"><i class="fas fa-play"></i> Go</button>
         </div>
 
         <!-- Action Choice Modal (Initially Hidden) -->
-        <div id="actionModal" style="display: none; text-align: center; margin-bottom: 40px;">
+        <div id="actionModal" class="action-modal animate-up">
             <h3 style="margin-bottom: 24px;">Choose an action:</h3>
-            <div style="display: flex; justify-content: center; gap: 24px;">
-                <button id="downloadActionBtn" class="btn btn-outline"
-                    style="min-width: 160px; justify-content: center;">
+            <div class="action-btns">
+                <button id="downloadActionBtn" class="btn btn-outline btn-lg">
                     <i class="fas fa-download"></i> Download
                 </button>
-                <button id="streamActionBtn" class="btn btn-primary" style="min-width: 160px; justify-content: center;">
+                <button id="streamActionBtn" class="btn btn-primary btn-lg">
                     <i class="fas fa-play"></i> Watch Online
                 </button>
             </div>
         </div>
 
-        <div class="streamvault-player" id="playerContainer">
+        <div class="streamvault-player animate-up delay-3" id="playerContainer">
             <video id="videoEl" playsinline></video>
 
             <div class="loading-state" id="spinner">
