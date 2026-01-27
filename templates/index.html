@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamVault | Instant Video Player</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <h1>StreamVault</h1>
+        <p class="subtitle">Paste a direct link and stream instantly. No downloads, no waiting.</p>
+
+        <div class="input-group">
+            <div class="input-wrapper">
+                <input type="text" id="videoUrl" placeholder="Paste direct video URL (mp4, mov, etc)...">
+            </div>
+            <button class="play-btn" onclick="loadVideo()">
+                <i class="fas fa-play"></i> Play Now
+            </button>
+        </div>
+
+        <div class="video-wrapper" id="videoContainer">
+            <div class="loading-spinner" id="spinner"></div>
+            <video id="mainPlayer" controls playsinline>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function loadVideo() {
+            const urlInput = document.getElementById('videoUrl');
+            const videoUrl = urlInput.value.trim();
+            const container = document.getElementById('videoContainer');
+            const player = document.getElementById('mainPlayer');
+            const spinner = document.getElementById('spinner');
+
+            if (!videoUrl) {
+                alert("Please enter a valid video URL");
+                return;
+            }
+
+            // Show container
+            container.classList.add('active');
+            spinner.style.display = 'block';
+
+            // Construct the proxy URL
+            // We use the same host, generic /stream endpoint
+            const proxyUrl = `/stream?url=${encodeURIComponent(videoUrl)}`;
+
+            // Set source
+            player.src = proxyUrl;
+            
+            player.oncanplay = () => {
+                spinner.style.display = 'none';
+                player.play();
+            };
+
+            player.onerror = () => {
+                spinner.style.display = 'none';
+                console.error("Error loading video");
+                // Fallback or error message could go here
+            };
+            
+            // Auto-focus the player
+            player.focus();
+        }
+    </script>
+</body>
+</html>
