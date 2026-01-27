@@ -4,82 +4,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamVault | The Modern Streaming Proxy</title>
+    <title>StreamVault | Universal Streaming Proxy</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
+    <!-- Background Glow -->
+    <div class="glow-bg"></div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container nav-content">
             <a href="/" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
             <ul class="nav-links">
-                <li><a href="/" class="active">Product</a></li>
-                <li><a href="app.html" class="btn btn-primary" style="padding: 8px 16px;">Launch App</a></li>
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="app.html" class="btn btn-primary btn-sm">Launch App</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Stream Anything.<br>Instantly.</h1>
-
-            <!-- Tutorial Section -->
-            <div
-                style="text-align: left; max-width: 600px; margin: 0 auto 40px; background: rgba(255,255,255,0.05); padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                <h3 style="margin-bottom: 16px; color: var(--accent);">How to use StreamVault:</h3>
-                <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px;">
-                    <li
-                        style="display: flex; align-items: center; gap: 12px; font-size: 1.1rem; color: var(--text-secondary);">
-                        <span
-                            style="background: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: white;">1</span>
-                        Paste your video link (direct URL)
-                    </li>
-                    <li
-                        style="display: flex; align-items: center; gap: 12px; font-size: 1.1rem; color: var(--text-secondary);">
-                        <span
-                            style="background: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: white;">2</span>
-                        Click "Play" and choose Stream or Download
-                    </li>
-                    <li
-                        style="display: flex; align-items: center; gap: 12px; font-size: 1.1rem; color: var(--text-secondary);">
-                        <span
-                            style="background: var(--primary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: white;">3</span>
-                        Enjoy seamless playback without buffering!
-                    </li>
-                </ul>
-            </div>
-
-            <div style="display: flex; justify-content: center; gap: 16px;">
-                <a href="app.html" class="btn btn-primary"><i class="fas fa-play"></i> Start Streaming Now</a>
+            <div class="hero-content">
+                <h1 class="animate-up delay-1">Stream <span class="text-gradient">Anything</span>.<br>Anywhere.</h1>
+                <p class="animate-up delay-2">Bypass restrictions and stream directly from your favorite platforms
+                    without downloading. No buffering, no ads, just content.</p>
+                <div class="hero-btns animate-up delay-3">
+                    <a href="app.html" class="btn btn-primary btn-lg"><i class="fas fa-play"></i> Start Streaming</a>
+                    <a href="#how-it-works" class="btn btn-outline btn-lg">How it Works</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Config (Visual only) -->
-    <div class="container features-grid" style="padding-bottom: 100px;">
-        <div style="background: var(--bg-secondary); padding: 32px; border-radius: 20px; border: var(--glass-border);">
-            <i class="fas fa-microchip" style="font-size: 2rem; color: var(--primary); margin-bottom: 16px;"></i>
-            <h3>Smart Caching</h3>
-            <p style="color: var(--text-secondary);">Intelligent buffer management that adapts to your network speed.
-            </p>
+    <!-- Supported Platforms -->
+    <section class="platforms section-padding">
+        <div class="container">
+            <h2 class="section-title text-center">Supported Platforms</h2>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <i class="fab fa-youtube" style="color: #ff0000;"></i>
+                    <span>YouTube</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-reddit" style="color: #ff4500;"></i>
+                    <span>Reddit</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-twitch" style="color: #9146ff;"></i>
+                    <span>Twitch</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-vimeo" style="color: #1ab7ea;"></i>
+                    <span>Vimeo</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-tiktok" style="color: #ff0050;"></i>
+                    <span>TikTok</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-pinterest" style="color: #e60023;"></i>
+                    <span>Pinterest</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fab fa-soundcloud" style="color: #ff5500;"></i>
+                    <span>SoundCloud</span>
+                </div>
+                <div class="platform-card">
+                    <i class="fas fa-globe" style="color: #22d3ee;"></i>
+                    <span>Direct URL</span>
+                </div>
+            </div>
         </div>
-        <div style="background: var(--bg-secondary); padding: 32px; border-radius: 20px; border: var(--glass-border);">
-            <i class="fas fa-globe" style="font-size: 2rem; color: var(--accent); margin-bottom: 16px;"></i>
-            <h3>Global Edge</h3>
-            <p style="color: var(--text-secondary);">Optimized connection routing to find the fastest path to content.
-            </p>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works section-padding">
+        <div class="container">
+            <h2 class="section-title text-center">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-link"></i>
+                        <span class="step-number">1</span>
+                    </div>
+                    <h3>Paste Link</h3>
+                    <p>Copy the video URL from YouTube, Reddit, or any supported site.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-cogs"></i>
+                        <span class="step-number">2</span>
+                    </div>
+                    <h3>We Process</h3>
+                    <p>Our smart backend extracts the direct stream instanly.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <i class="fas fa-play-circle"></i>
+                        <span class="step-number">3</span>
+                    </div>
+                    <h3>You Watch</h3>
+                    <p>Stream smoothly in our player or download for later.</p>
+                </div>
+            </div>
         </div>
-        <div style="background: var(--bg-secondary); padding: 32px; border-radius: 20px; border: var(--glass-border);">
-            <i class="fas fa-shield-alt" style="font-size: 2rem; color: #a855f7; margin-bottom: 16px;"></i>
-            <h3>Secure Tunnel</h3>
-            <p style="color: var(--text-secondary);">Your IP is hidden. Proxies headers to bypass basic restrictions.
-            </p>
+    </section>
+
+    <!-- Features -->
+    <section class="features section-padding">
+        <div class="container">
+            <h2 class="section-title text-center">Why StreamVault?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-microchip icon-glow primary"></i>
+                    <h3>Smart Caching</h3>
+                    <p>Intelligent buffer management that adapts to your network speed for lag-free playback.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt icon-glow accent"></i>
+                    <h3>Mobile First</h3>
+                    <p>Optimized UI for phones with a dedicated app-like experience via PWA capabilities.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt icon-glow purple"></i>
+                    <h3>Privacy Focused</h3>
+                    <p>Your requests are proxied. We don't track what you watch. Totally anonymous.</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer section-padding">
+        <div class="container text-center">
+            <p class="brand" style="justify-content: center; margin-bottom: 16px;"><i class="fas fa-bolt"></i>
+                StreamVault</p>
+            <p style="color: var(--text-secondary);">The modern way to stream.</p>
+            <br>
+            <p style="font-size: 0.8rem; color: #555;">&copy; 2026 StreamVault. All rights reserved.</p>
+        </div>
+    </footer>
 
 </body>
 
