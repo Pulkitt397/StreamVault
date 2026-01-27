@@ -829,3 +829,44 @@ body {
         padding-top: 140px;
     }
 }
+
+/* --- Maintenance Page --- */
+.maintenance-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 24px;
+}
+
+.maintenance-progress {
+    width: 100%;
+    max-width: 400px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50%;
+    background: linear-gradient(90deg, #ef4444, #f59e0b);
+    border-radius: 6px;
+    animation: progressIndeterminate 1.5s infinite ease-in-out;
+}
+
+@keyframes progressIndeterminate {
+    0% {
+        left: -50%;
+        width: 50%;
+    }
+
+    100% {
+        left: 100%;
+        width: 50%;
+    }
+}
