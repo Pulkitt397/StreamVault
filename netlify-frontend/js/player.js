@@ -115,6 +115,28 @@ document.addEventListener('DOMContentLoaded', () => {
         actionModal.style.display = 'block';
     });
 
+    // Paste Button Logic
+    const pasteBtn = document.getElementById('pasteBtn');
+    if (pasteBtn) {
+        pasteBtn.addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    urlInput.value = text;
+                    // Optional: Auto-focus or highlight
+                    urlInput.focus();
+                    // Visual feedback
+                    const originalIcon = pasteBtn.innerHTML;
+                    pasteBtn.innerHTML = '<i class="fas fa-check" style="color: var(--primary)"></i>';
+                    setTimeout(() => pasteBtn.innerHTML = originalIcon, 1500);
+                }
+            } catch (err) {
+                console.error('Failed to read clipboard', err);
+                alert('Clipboard permission denied or not available.');
+            }
+        });
+    }
+
     // Option A: Download
     downloadActionBtn.addEventListener('click', () => {
         if (!currentUrl) return;

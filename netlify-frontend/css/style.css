@@ -649,6 +649,26 @@ body {
     }
 }
 
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    color: var(--primary);
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
 /* --- Downloader Page Styles --- */
 .download-card {
     background: var(--card-bg);
