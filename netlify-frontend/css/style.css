@@ -649,8 +649,118 @@ body {
     }
 }
 
-/* --- Responsive --- */
+/* --- Downloader Page Styles --- */
+.download-card {
+    background: var(--card-bg);
+    border: var(--glass-border);
+    padding: 40px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 700px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-bottom: 40px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.option-group label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.tabs,
+.toggle-switch {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 12px;
+    display: flex;
+    gap: 4px;
+}
+
+.tab-btn,
+.toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tab-btn.active,
+.toggle-btn.active {
+    background: var(--bg-secondary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.simple-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+.recent-downloads {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.platform-mini-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 50px;
+    border: var(--glass-border);
+}
+
+.platform-mini-grid i {
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.platform-mini-grid i:hover {
+    transform: scale(1.2);
+    color: white;
+}
+
 @media (max-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .download-card {
+        padding: 24px;
+    }
+
     .container {
         padding: 0 20px;
     }

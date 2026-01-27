@@ -118,13 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Option A: Download
     downloadActionBtn.addEventListener('click', () => {
         if (!currentUrl) return;
-        if (!activeBackend) {
-            alert('No backend available for download. Try direct link.');
-            return;
-        }
-        // Trigger download via proxy with download=true param
-        const downloadUrl = `${activeBackend}/stream?url=${encodeURIComponent(currentUrl)}&download=true`;
-        window.location.href = downloadUrl;
+        // Redirect to dedicated download page with URL pre-filled
+        window.location.href = `download.html?url=${encodeURIComponent(currentUrl)}`;
     });
 
     // Option B: Watch Online

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamVault | Downloader</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Background Glow -->
+    <div class="glow-bg"></div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
+            <div class="nav-links">
+                <a href="/" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container app-layout">
+
+        <div class="download-card animate-up delay-1">
+            <h1 class="text-center" style="margin-bottom: 8px;">Universal <span class="text-gradient">Downloader</span>
+            </h1>
+            <p class="text-center" style="color: var(--text-secondary); margin-bottom: 32px;">Save videos from YouTube,
+                Reddit, TikTok & more for offline viewing.</p>
+
+            <div class="url-bar">
+                <input type="text" id="urlInput" placeholder="Paste video link here...">
+            </div>
+
+            <div class="options-grid">
+                <!-- Quality Selection -->
+                <div class="option-group">
+                    <label>Quality</label>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-value="best">Best</button>
+                        <button class="tab-btn" data-value="1080p">1080p</button>
+                        <button class="tab-btn" data-value="720p">720p</button>
+                    </div>
+                </div>
+
+                <!-- Format Selection -->
+                <div class="option-group">
+                    <label>Format</label>
+                    <div class="toggle-switch">
+                        <button class="toggle-btn active" data-value="video"><i class="fas fa-video"></i> Video</button>
+                        <button class="toggle-btn" data-value="audio"><i class="fas fa-music"></i> Audio</button>
+                    </div>
+                </div>
+            </div>
+
+            <button id="downloadBtn" class="btn btn-primary btn-lg btn-block"
+                style="width: 100%; margin-top: 24px; justify-content: center;">
+                <i class="fas fa-download"></i> Start Download
+            </button>
+
+            <!-- Status / Progress -->
+            <div id="statusArea" class="status-area" style="display: none; margin-top: 24px; text-align: center;">
+                <div class="spinner simple-spinner"></div>
+                <p id="statusText">Processing...</p>
+            </div>
+        </div>
+
+        <!-- Recent Downloads (Visual Only for now) -->
+        <div class="recent-downloads animate-up delay-2">
+            <h3 style="margin-bottom: 16px;">Supported Platforms</h3>
+            <div class="platform-mini-grid">
+                <i class="fab fa-youtube" title="YouTube"></i>
+                <i class="fab fa-reddit" title="Reddit"></i>
+                <i class="fab fa-twitch" title="Twitch"></i>
+                <i class="fab fa-tiktok" title="TikTok"></i>
+                <i class="fab fa-instagram" title="Instagram"></i>
+                <i class="fab fa-facebook" title="Facebook"></i>
+                <i class="fab fa-vimeo" title="Vimeo"></i>
+                <i class="fab fa-soundcloud" title="SoundCloud"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Downloader Logic -->
+    <script src="js/downloader.js"></script>
+</body>
+
+</html>
