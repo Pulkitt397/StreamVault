@@ -4,8 +4,8 @@
  */
 
 const CONFIG = {
-    // Primary backend (your phone via Ngrok permanent domain)
-    PRIMARY_BACKEND: 'https://jasmin-vicegeral-nonsubjectively.ngrok-free.dev',
+    // Primary backend (your phone via Cloudflare Quick Tunnel)
+    PRIMARY_BACKEND: 'https://conclusions-pillow-materials-examples.trycloudflare.com',
     // Fallback backend
     FALLBACK_BACKEND: 'https://streamvault-backend.onrender.com'
 };
@@ -199,17 +199,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function checkBackend() {
+        // 1. Get stored URL or default
+        let targetUrl = localStorage.getItem('sv_backend_url') || CONFIG.PRIMARY_BACKEND;
+
         try {
-            await fetch(CONFIG.PRIMARY_BACKEND + '/', {
+            statusText.innerText = 'Connecting to backend...';
+            // Simple ping
+            await fetch(targetUrl + '/', {
                 method: 'GET',
                 mode: 'cors',
                 signal: AbortSignal.timeout(3000)
             });
-            console.log('Connected to Phone Backend');
-            activeBackend = CONFIG.PRIMARY_BACKEND;
+            console.log('Connected to:', targetUrl);
+            activeBackend = targetUrl;
+
+            // Visual indicator on download page
+            statusArea.style.display = 'block';
+            statusText.innerText = '● Connected to Phone';
+            statusText.style.color = '#22c55e';
+            statusArea.style.background = 'rgba(34, 197, 94, 0.1)';
+            setTimeout(() => { statusArea.style.display = 'none'; }, 2000);
+
         } catch (e) {
-            console.log('Phone backend unreachable, using fallback');
-            activeBackend = CONFIG.FALLBACK_BACKEND;
+            console.log('Backend not reachable:', e);
+
+            // If download page, we assume they WANT to download, so we prompt immediately if it fails
+            const newUrl = prompt("🔴 Backend Offline!\n\nPaste your new Cloudflare URL from Termux:\n(Starts with https://...trycloudflare.com)");
+            if (newUrl) {
+                const cleanUrl = newUrl.trim().replace(/\/$/, "");
+                localStorage.setItem('sv_backend_url', cleanUrl);
+                activeBackend = cleanUrl;
+                checkBackend(); // Retry
+            } else {
+                // Fallback
+                activeBackend = CONFIG.FALLBACK_BACKEND;
+            }
         }
     }
 

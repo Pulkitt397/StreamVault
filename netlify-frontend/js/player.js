@@ -4,7 +4,7 @@
 const CONFIG = {
     // Primary backend (your phone via Cloudflare tunnel)
     // UPDATE THIS with your current cloudflared URL
-    PRIMARY_BACKEND: 'https://jasmin-vicegeral-nonsubjectively.ngrok-free.dev',
+    PRIMARY_BACKEND: 'https://conclusions-pillow-materials-examples.trycloudflare.com',
 
     // Fallback backend (Render - always available)
     // UPDATE THIS with your Render URL
@@ -43,57 +43,72 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPlaying = false;
     let currentUrl = "";
 
-    // --- Check Backend Status ---
-    async function checkBackendStatus() {
-        statusDot.style.background = '#fbbf24'; // Yellow - checking
-        statusText.textContent = 'Checking backend...';
-        statusBar.style.background = 'rgba(251, 191, 36, 0.1)';
-        statusBar.style.border = '1px solid rgba(251, 191, 36, 0.3)';
+    // --- Dynamic Backend Management ---
 
-        // Try primary backend first
+    function getStoredBackend() {
+        return localStorage.getItem('sv_backend_url') || CONFIG.PRIMARY_BACKEND;
+    }
+
+    function setStoredBackend(url) {
+        if (!url) return;
+        // Clean up URL
+        url = url.trim().replace(/\/$/, "");
+        localStorage.setItem('sv_backend_url', url);
+        activeBackend = url;
+    }
+
+    async function checkBackendStatus() {
+        statusDot.style.background = '#fbbf24'; // Yellow
+        statusText.textContent = 'Checking connectivity...';
+        statusBar.style.background = 'rgba(251, 191, 36, 0.1)';
+
+        const targetUrl = getStoredBackend();
+        console.log("Checking backend:", targetUrl);
+
         try {
-            const response = await fetch(CONFIG.PRIMARY_BACKEND + '/', {
+            const response = await fetch(targetUrl + '/', {
                 method: 'GET',
                 mode: 'cors',
-                signal: AbortSignal.timeout(5000)
+                signal: AbortSignal.timeout(3000)
             });
+
             if (response.ok) {
-                activeBackend = CONFIG.PRIMARY_BACKEND;
+                // Success!
+                activeBackend = targetUrl;
                 statusDot.style.background = '#22c55e'; // Green
                 statusText.textContent = 'Live';
                 statusBar.style.background = 'rgba(34, 197, 94, 0.1)';
-                statusBar.style.border = '1px solid rgba(34, 197, 94, 0.3)';
                 return;
             }
         } catch (e) {
-            console.log('Primary backend unavailable, trying fallback...');
+            console.log("Backend offline:", e);
         }
 
-        // Try fallback backend
-        try {
-            const response = await fetch(CONFIG.FALLBACK_BACKEND + '/', {
-                method: 'GET',
-                mode: 'cors',
-                signal: AbortSignal.timeout(5000)
-            });
-            if (response.ok) {
-                activeBackend = CONFIG.FALLBACK_BACKEND;
-                statusDot.style.background = '#3b82f6'; // Blue
-                statusText.textContent = 'Live (Cloud)';
-                statusBar.style.background = 'rgba(59, 130, 246, 0.1)';
-                statusBar.style.border = '1px solid rgba(59, 130, 246, 0.3)';
-                return;
-            }
-        } catch (e) {
-            console.log('Fallback backend also unavailable');
+        // Only try fallback if configured
+        if (CONFIG.FALLBACK_BACKEND) {
+            try {
+                const fbRes = await fetch(CONFIG.FALLBACK_BACKEND + '/', { signal: AbortSignal.timeout(3000) });
+                if (fbRes.ok) {
+                    activeBackend = CONFIG.FALLBACK_BACKEND;
+                    statusDot.style.background = '#3b82f6';
+                    statusText.textContent = 'Live (Cloud)';
+                    statusBar.style.background = 'rgba(59, 130, 246, 0.1)';
+                    return; // Don't prompt if fallback works
+                }
+            } catch (e) { }
         }
 
-        // Both backends down
+        // If we get here, both Custom and Fallback failed
         statusDot.style.background = '#ef4444'; // Red
         statusText.textContent = 'Offline';
         statusBar.style.background = 'rgba(239, 68, 68, 0.1)';
-        statusBar.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-        activeBackend = null;
+
+        // Prompt user for new URL
+        const newUrl = prompt("🔴 Backend Offline!\n\nPaste your new Cloudflare URL from Termux:\n(Starts with https://...trycloudflare.com)");
+        if (newUrl) {
+            setStoredBackend(newUrl);
+            checkBackendStatus(); // Retry immediately
+        }
     }
 
     // Check status on load
