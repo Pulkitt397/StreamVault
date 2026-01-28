@@ -78,6 +78,14 @@ def resolve_stream_url(url: str, quality: str = "best", audio_only: bool = False
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             direct_url = info.get('url')
+            
+            # Fallback: if 'url' is missing, check 'formats'
+            if not direct_url and 'formats' in info:
+                # Get the last format (usually best quality) that has a URL
+                valid_formats = [f for f in info['formats'] if f.get('url')]
+                if valid_formats:
+                    direct_url = valid_formats[-1]['url']
+            
             title = info.get('title', 'video')
             detected_ext = info.get('ext', ext)
             filesize = info.get('filesize') or info.get('filesize_approx') or 0
@@ -98,6 +106,9 @@ async def get_video_info(url: str, quality: str = "best", audio_only: bool = Fal
     
     try:
         direct_url, filename, filesize = resolve_stream_url(url, quality, audio_only)
+        if not direct_url:
+             raise HTTPException(status_code=422, detail="Could not resolve video URL")
+             
         return {
             "success": True,
             "title": filename,
@@ -118,6 +129,9 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
 
     # Resolve URL (handle YouTube/Reddit etc.)
     target_url, filename, _ = resolve_stream_url(url)
+    
+    if not target_url:
+        raise HTTPException(status_code=422, detail="Could not resolve valid stream URL")
     
     headers = {}
     range_header = request.headers.get("range")
