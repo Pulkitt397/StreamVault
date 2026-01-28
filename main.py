@@ -156,10 +156,10 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
             response_headers[key] = r.headers[key]
     
     if download:
-        # Sanitation for filename
-        import re
-        safe_filename = re.sub(r'[^\w\-_\. ]', '', filename)
-        response_headers["Content-Disposition"] = f'attachment; filename="{safe_filename}"'
+        # RFC 5987 compliant content disposition for non-ASCII filenames
+        from urllib.parse import quote
+        encoded_filename = quote(filename)
+        response_headers["Content-Disposition"] = f"attachment; filename*=utf-8''{encoded_filename}"
 
     async def content_generator():
         try:
