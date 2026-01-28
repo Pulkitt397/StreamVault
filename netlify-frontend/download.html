@@ -11,14 +11,14 @@
 
 <body>
 
-    <!-- Background Glow -->
-    <div class="glow-bg"></div>
+    <!-- Flow Field Background -->
+    <div id="flow-field-container"></div>
 
     <nav class="navbar">
         <div class="container nav-content">
-            <a href="/" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
+            <a href="index.html" class="brand"><i class="fas fa-bolt"></i> StreamVault</a>
             <div class="nav-links">
-                <a href="/" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back to Home</a>
             </div>
         </div>
     </nav>
@@ -65,12 +65,19 @@
 
             <!-- Status / Progress -->
             <div id="statusArea" class="status-area" style="display: none; margin-top: 24px; text-align: center;">
-                <div class="spinner simple-spinner"></div>
-                <p id="statusText">Processing...</p>
+                <p id="statusText" style="margin-bottom: 16px; color: var(--text-secondary);">Processing...</p>
+
+                <!-- Progress Bar -->
+                <div id="progressContainer" class="progress-bar-container" style="display: none;">
+                    <div class="progress-track">
+                        <div id="progressBar" class="progress-fill"></div>
+                    </div>
+                    <p id="progressText" class="progress-label">0%</p>
+                </div>
             </div>
         </div>
 
-        <!-- Recent Downloads (Visual Only for now) -->
+        <!-- Supported Platforms -->
         <div class="recent-downloads animate-up delay-2">
             <h3 style="margin-bottom: 16px;">Supported Platforms</h3>
             <div class="platform-mini-grid">
@@ -87,6 +94,8 @@
 
     </div>
 
+    <!-- Flow Field Background Script -->
+    <script src="js/flow-field.js"></script>
     <!-- Downloader Logic -->
     <script src="js/downloader.js"></script>
 </body>

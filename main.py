@@ -50,13 +50,27 @@ async def landing_page(request: Request):
 async def app_page(request: Request):
     return templates.TemplateResponse("app.html", {"request": request})
 
-def resolve_stream_url(url: str):
+def resolve_stream_url(url: str, quality: str = "best", audio_only: bool = False):
     """
     Uses yt-dlp to extract the direct video URL and title.
-    Returns (direct_url, filename).
+    Returns (direct_url, filename, filesize).
     """
+    # Build format string based on options
+    if audio_only:
+        format_str = 'bestaudio/best'
+        ext = 'mp3'
+    elif quality == "720p":
+        format_str = 'bestvideo[height<=720]+bestaudio/best[height<=720]/best'
+        ext = 'mp4'
+    elif quality == "1080p":
+        format_str = 'bestvideo[height<=1080]+bestaudio/best[height<=1080]/best'
+        ext = 'mp4'
+    else:  # best
+        format_str = 'bestvideo+bestaudio/best'
+        ext = 'mp4'
+    
     ydl_opts = {
-        'format': 'best',
+        'format': format_str,
         'quiet': True,
         'noplaylist': True,
     }
@@ -65,13 +79,34 @@ def resolve_stream_url(url: str):
             info = ydl.extract_info(url, download=False)
             direct_url = info.get('url')
             title = info.get('title', 'video')
-            ext = info.get('ext', 'mp4')
-            filename = f"{title}.{ext}"
-            return direct_url, filename
+            detected_ext = info.get('ext', ext)
+            filesize = info.get('filesize') or info.get('filesize_approx') or 0
+            filename = f"{title}.{detected_ext}"
+            return direct_url, filename, filesize
     except Exception as e:
         logger.warning(f"yt-dlp failed for {url}: {e}")
         # Fallback: assume it's already a direct link
-        return url, "video.mp4"
+        return url, "video.mp4", 0
+
+@app.get("/info")
+async def get_video_info(url: str, quality: str = "best", audio_only: bool = False):
+    """
+    Get video metadata including file size for progress tracking.
+    """
+    if not url:
+        raise HTTPException(status_code=400, detail="Missing URL parameter")
+    
+    try:
+        direct_url, filename, filesize = resolve_stream_url(url, quality, audio_only)
+        return {
+            "success": True,
+            "title": filename,
+            "filesize": filesize,
+            "url": direct_url
+        }
+    except Exception as e:
+        logger.error(f"Failed to get info for {url}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/stream")
 async def proxy_stream(url: str, request: Request, download: bool = False):
@@ -82,7 +117,7 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
         raise HTTPException(status_code=400, detail="Missing URL parameter")
 
     # Resolve URL (handle YouTube/Reddit etc.)
-    target_url, filename = resolve_stream_url(url)
+    target_url, filename, _ = resolve_stream_url(url)
     
     headers = {}
     range_header = request.headers.get("range")
@@ -128,4 +163,8 @@ async def proxy_stream(url: str, request: Request, download: bool = False):
         headers=response_headers,
         media_type=r.headers.get("content-type", "video/mp4")
     )
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 

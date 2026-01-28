@@ -4,7 +4,7 @@
 const CONFIG = {
     // Primary backend (your phone via Cloudflare tunnel)
     // UPDATE THIS with your current cloudflared URL
-    PRIMARY_BACKEND: 'https://uri-stored-expand-revolutionary.trycloudflare.com',
+    PRIMARY_BACKEND: 'https://jasmin-vicegeral-nonsubjectively.ngrok-free.dev',
 
     // Fallback backend (Render - always available)
     // UPDATE THIS with your Render URL
